@@ -1,0 +1,59 @@
+<p style="position: fixed; width: 100%; z-index: 2">
+  <mat-toolbar color="primary">
+    <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>My App</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button aria-label="Example icon-button with heart icon">
+      <mat-icon>favorite</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with share icon">
+      <mat-icon>share</mat-icon>
+    </button>
+  </mat-toolbar>
+</p>
+
+<mat-drawer-container class="example-container" hasBackdrop="false" style="height: 100vh">
+  <mat-drawer #drawer mode="side" opened>
+<!--    <mat-toolbar color="primary" style="width: 200px">-->
+<!--      Menu-->
+<!--    </mat-toolbar>-->
+    <div style="margin-top: 70px"></div>
+    <div>
+      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
+        <mat-icon>favorite</mat-icon>
+        Product
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-flat-button class="text-start w-100" (click)="setPage('productType')">
+        <mat-icon>favorite</mat-icon>
+        Product Type
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
+        Basic
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
+        Basic
+      </button>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+
+    <div style="margin-top: 70px"></div>
+    <div [ngSwitch]="pageName" class="mx-3 my-3">
+      <div *ngSwitchCase="'product'">
+        <app-product></app-product>
+      </div>
+      <div *ngSwitchCase="'productType'">
+        <app-product-type></app-product-type>
+      </div>
+      <div *ngSwitchDefault>
+        no page
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

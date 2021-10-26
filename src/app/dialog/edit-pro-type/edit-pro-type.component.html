@@ -1,0 +1,11 @@
+<div mat-dialog-content>
+  <p>Edit Product type</p>
+  <mat-form-field appearance="fill">
+    <mat-label>Product type</mat-label>
+    <input matInput [(ngModel)]="dataValue.typeName">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align='end'>
+  <button mat-button (click)="onNoClick()">Close</button>
+  <button color="primary" mat-button (click)="onOk()">Save</button>
+</div>
