@@ -6,7 +6,7 @@ import {HttpHeaders} from "@angular/common/http";
 })
 export class DataServiceService {
 
-  baseURI = 'https://localhost:44317/api';
+  baseURI = 'https://localhost:44317';
   headers = new HttpHeaders();
 
   constructor() {

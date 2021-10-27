@@ -32,7 +32,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
   }
 
   getTypes(): void {
-    this.http.get<ResData>(this.dataSer.baseURI + '/ProductType', {headers: this.dataSer.headers})
+    this.http.get<ResData>(this.dataSer.baseURI + '/api/ProductType', {headers: this.dataSer.headers})
       .subscribe(value => {
         // console.log(value)
         this.dataSource = new MatTableDataSource<ValueDataType>(value.data);
@@ -47,7 +47,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
       typeName: f.value.type
     }
     if (f.valid) {
-      this.http.post(this.dataSer.baseURI + '/ProductType/Insert', body, {headers: this.dataSer.headers})
+      this.http.post(this.dataSer.baseURI + '/api/ProductType/Insert', body, {headers: this.dataSer.headers})
         .subscribe(value => {
           if (typeof value !== undefined) {
             f.resetForm()

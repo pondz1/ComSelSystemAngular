@@ -1,1 +1,228 @@
-<p>product works!</p>
+<div *ngIf="!displayProduct">
+  <div>
+
+    <div *ngIf="!isEdit; else elseH1">
+      <h1 >Add Product</h1>
+    </div>
+    <ng-template #elseH1>
+      <h1 >Edit Product</h1>
+    </ng-template>
+  </div>
+  <div>
+    <mat-card>
+      <div class="mb-1 row justify-content-center" *ngIf="dbPath == null && progress == 0" style="height: 200px">
+        <img src="/assets/upload-1.png" alt="upload image" style="height: 200px; width: auto">
+      </div>
+      <div class="mb-1 row justify-content-center" *ngIf="progress != 0 && progress < 100" style="height: 200px">
+        <mat-spinner></mat-spinner>
+      </div>
+      <div class="mb-3 row justify-content-center" *ngIf="dbPath != undefined  && progress >= 100" style="height: 200px">
+        <img [src]="createImgPath(dbPath.dbPath)" alt="upload image" style="height: 200px;width: auto">
+      </div>
+
+      <div id="imgEdit" class="mb-3 row justify-content-center" *ngIf="dbPath != undefined && isEdit && progress <= 0" style="height: 200px">
+        <img [src]="createImgPath(dbPath.dbPath)" alt="upload image" style="height: 200px;width: auto">
+      </div>
+
+      <div class=" mb-3 row justify-content-center ">
+        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files!)" style="display:none;"
+               accept="image/jpeg,image/png">
+        <button mat-flat-button color="primary" style="width: 180px" (click)="file.click()">
+          Upload
+        </button>
+      </div>
+      <form #f="ngForm" (ngSubmit)="insert(f)">
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Name</mat-label>
+              <input name="name" required [ngModel]="productEdit?.proName" matInput autocomplete="off" >
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label> Product Type</mat-label>
+              <mat-select [formControl]="selectFormControl" required [(value)]="selectedType">
+                <mat-option *ngFor="let type of productTypes" [value]="type.typeID">
+                  {{type.typeName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Price</mat-label>
+              <input name="price" type="number" required [ngModel]="productEdit?.proPrice" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Brand</mat-label>
+              <input name="brand" required [ngModel]="productEdit?.proBrand" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Model</mat-label>
+              <input name="model" required [ngModel]="productEdit?.proModel" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Amount</mat-label>
+              <input name="amount" type="number" required [ngModel]="productEdit?.proAmount" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Product Detail</mat-label>
+              <input name="detail" required [ngModel]="productEdit?.proDetail" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <button mat-flat-button color="primary" type="submit" class="me-2">
+            {{isEdit ? 'Save' : 'Create'}}
+          </button>
+          <button mat-flat-button color="warn" (click)="setDisplayProduct(true)">
+            Back
+          </button>
+
+          <swal
+            #created
+            title="Create Successfully"
+            icon="success"
+            (confirm)="setDisplayProduct(true)">
+          </swal>
+
+          <swal
+            #updated
+            title="Update Successfully"
+            icon="success"
+            (confirm)="setDisplayProduct(true)">
+          </swal>
+
+        </div>
+
+      </form>
+
+    </mat-card>
+  </div>
+</div>
+<div *ngIf="displayProduct">
+  <div>
+    <h1>
+      Product
+    </h1>
+  </div>
+  <div class="mb-3">
+    <div class="row justify-content-between">
+      <div class="col-1">
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Search</mat-label>
+          <input type="text" name="search" (input)="applyFilter($event)" matInput autocomplete="off" [(ngModel)]="searchText">
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="resetSearch()">
+          Reset
+        </button>
+      </div>
+      <div class="col-1 justify-content-end">
+        <button mat-flat-button color="primary"  (click)="setDisplayProduct(false)">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="proImage">
+        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <td mat-cell *matCellDef="let element; let i = index;" class="pt-1 pb-1 pe-3 ps-3" style="width: 150px">
+          <img *ngIf="element.proImage != null; else elseBlock" [src]="createImgPath(element.proImage)"
+               alt="product picture" style="width: 100%; height:80px; object-fit: contain">
+          <ng-template #elseBlock>
+            <img src="/assets/noimage.jpg" alt="product picture"
+                 style="width: 100%; height:80px; object-fit: contain">
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="productId">
+        <th mat-header-cell *matHeaderCellDef> Product Id</th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{element.productId}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proName">
+        <th mat-header-cell *matHeaderCellDef> Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.proName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proAmount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let element"> {{element.proAmount.toLocaleString()}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proPrice">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{element.proPrice.toLocaleString()}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proType">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let element; let i = index;"> <button mat-button color="primary" (click)="setSearch(element)">{{element.proType.typeName}}</button> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proBrand">
+        <th mat-header-cell *matHeaderCellDef> Brand</th>
+        <td mat-cell *matCellDef="let element"> {{element.proBrand}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proModel">
+        <th mat-header-cell *matHeaderCellDef> Model</th>
+        <td mat-cell *matCellDef="let element"> {{element.proModel}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="proDetail">
+        <th mat-header-cell *matHeaderCellDef style="width: 370px"> Detail</th>
+        <td mat-cell *matCellDef="let element"> {{element.proDetail}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="width: 120px">Action</th>
+        <td mat-cell *matCellDef="let element;">
+          <button mat-icon-button color="accent" (click)="setDisplayUpdate(false, true, element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSwal.fire()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <swal
+            #deleteSwal
+            title="Delete {{ element.proName }}?"
+            text="This cannot be undone"
+            icon="question"
+            [showCancelButton]="true"
+            [focusCancel]="true"
+            (confirm)="deleteProduct(element)">
+          </swal>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>

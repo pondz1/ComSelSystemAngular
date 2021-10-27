@@ -25,7 +25,7 @@ export class EditProTypeComponent {
 
   onOk(): void {
     // console.log(this.data)
-    this.http.put(this.dataServ.baseURI + '/ProductType/Update', this.data, {headers: this.dataServ.headers})
+    this.http.put(this.dataServ.baseURI + '/api/ProductType/Update', this.data, {headers: this.dataServ.headers})
       .subscribe(value => {
         // console.log(value)
         if (typeof value !== undefined) {

@@ -22,7 +22,7 @@ export class ConfirmComponent {
 
   onOk(): void {
     // console.log(this.data)
-    this.http.delete(this.dataServ.baseURI + '/ProductType/' + this.data.typeID)
+    this.http.delete(this.dataServ.baseURI + '/api/ProductType/' + this.data.typeID)
       .subscribe(value => {
         // console.log(value)
         if (typeof value !== undefined){

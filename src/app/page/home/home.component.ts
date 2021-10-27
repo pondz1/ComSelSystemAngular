@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.pageName = 'productType'
+    this.pageName = 'product'
   }
   setPage(value: string): void {
     this.pageName = value
