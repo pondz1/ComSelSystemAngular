@@ -2,10 +2,10 @@
   <div>
 
     <div *ngIf="!isEdit; else elseH1">
-      <h1 >Add Product</h1>
+      <h1>Add Product</h1>
     </div>
     <ng-template #elseH1>
-      <h1 >Edit Product</h1>
+      <h1>Edit Product</h1>
     </ng-template>
   </div>
   <div>
@@ -16,11 +16,13 @@
       <div class="mb-1 row justify-content-center" *ngIf="progress != 0 && progress < 100" style="height: 200px">
         <mat-spinner></mat-spinner>
       </div>
-      <div class="mb-3 row justify-content-center" *ngIf="dbPath != undefined  && progress >= 100" style="height: 200px">
+      <div class="mb-3 row justify-content-center" *ngIf="dbPath != undefined  && progress >= 100"
+           style="height: 200px">
         <img [src]="createImgPath(dbPath.dbPath)" alt="upload image" style="height: 200px;width: auto">
       </div>
 
-      <div id="imgEdit" class="mb-3 row justify-content-center" *ngIf="dbPath != undefined && isEdit && progress <= 0" style="height: 200px">
+      <div id="imgEdit" class="mb-3 row justify-content-center" *ngIf="dbPath != undefined && isEdit && progress <= 0"
+           style="height: 200px">
         <img [src]="createImgPath(dbPath.dbPath)" alt="upload image" style="height: 200px;width: auto">
       </div>
 
@@ -36,7 +38,7 @@
           <div class="col">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Product Name</mat-label>
-              <input name="name" required [ngModel]="productEdit?.proName" matInput autocomplete="off" >
+              <input name="name" required [ngModel]="productEdit?.proName" matInput autocomplete="off">
             </mat-form-field>
           </div>
           <div class="col">
@@ -73,7 +75,7 @@
           <div class="col">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Product Amount</mat-label>
-              <input name="amount" type="number" required [ngModel]="productEdit?.proAmount" matInput autocomplete="off">
+              <input name="amount" required [ngModel]="productEdit?.proAmount" matInput autocomplete="off">
             </mat-form-field>
           </div>
         </div>
@@ -109,6 +111,13 @@
             (confirm)="setDisplayProduct(true)">
           </swal>
 
+          <swal
+            #errored
+            title="Error status 400"
+            icon="error"
+          >
+          </swal>
+
         </div>
 
       </form>
@@ -123,18 +132,28 @@
     </h1>
   </div>
   <div class="mb-3">
-    <div class="row justify-content-between">
-      <div class="col-1">
-        <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Search</mat-label>
-          <input type="text" name="search" (input)="applyFilter($event)" matInput autocomplete="off" [(ngModel)]="searchText">
-        </mat-form-field>
-        <button mat-flat-button color="primary" (click)="resetSearch()">
-          Reset
-        </button>
+    <div class="row justify-content-between align-items-baseline">
+      <div class="col">
+        <div class="row align-items-baseline">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Search</mat-label>
+              <input type="text" name="search" matInput autocomplete="off" [(ngModel)]="searchText">
+            </mat-form-field>
+          </div>
+          <!--          <span class="example-spacer"></span>-->
+          <div class="col">
+            <button mat-flat-button color="primary" class="me-2" (click)="onSearch()">
+              Search
+            </button>
+            <button mat-flat-button color="warn" (click)="resetSearch()">
+              Reset
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="col-1 justify-content-end">
-        <button mat-flat-button color="primary"  (click)="setDisplayProduct(false)">
+      <div class="col-1">
+        <button mat-flat-button color="primary" (click)="setDisplayProduct(false)">
           Add
         </button>
       </div>
@@ -176,7 +195,9 @@
 
       <ng-container matColumnDef="proType">
         <th mat-header-cell *matHeaderCellDef>Type</th>
-        <td mat-cell *matCellDef="let element; let i = index;"> <button mat-button color="primary" (click)="setSearch(element)">{{element.proType.typeName}}</button> </td>
+        <td mat-cell *matCellDef="let element; let i = index;">
+          <button mat-button color="primary" (click)="setSearch(element)">{{element.proType.typeName}}</button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="proBrand">
@@ -191,7 +212,7 @@
 
       <ng-container matColumnDef="proDetail">
         <th mat-header-cell *matHeaderCellDef style="width: 370px"> Detail</th>
-        <td mat-cell *matCellDef="let element"> {{element.proDetail}} </td>
+        <td mat-cell *matCellDef="let element"><label class="pt-2 pb-2">{{element.proDetail}}</label></td>
       </ng-container>
 
       <ng-container matColumnDef="action">

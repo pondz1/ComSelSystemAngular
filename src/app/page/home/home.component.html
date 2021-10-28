@@ -3,7 +3,7 @@
     <button mat-icon-button aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>My App</span>
+    <span>Computer Hardware Store System</span>
     <span class="example-spacer"></span>
     <button mat-icon-button aria-label="Example icon-button with heart icon">
       <mat-icon>favorite</mat-icon>
@@ -19,23 +19,23 @@
 <!--    <mat-toolbar color="primary" style="width: 200px">-->
 <!--      Menu-->
 <!--    </mat-toolbar>-->
-    <div style="margin-top: 70px"></div>
+    <div style="margin-top: 64px"></div>
     <div>
-      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
-        <mat-icon>favorite</mat-icon>
+      <button mat-button class="text-start w-100" (click)="setPage('product')" color="{{pageName == 'product' ? 'primary' : 'null'}}">
+        <mat-icon >inventory_2</mat-icon>
         Product
       </button>
       <mat-divider></mat-divider>
-      <button mat-flat-button class="text-start w-100" (click)="setPage('productType')">
-        <mat-icon>favorite</mat-icon>
+      <button mat-button class="text-start w-100" (click)="setPage('productType')" color="{{pageName == 'productType' ? 'primary' : 'null'}}">
+        <mat-icon>category</mat-icon>
         Product Type
       </button>
       <mat-divider></mat-divider>
-      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
+      <button mat-button class="text-start w-100" (click)="setPage('product3')" color="{{pageName == 'product3' ? 'primary' : 'null'}}">
         Basic
       </button>
       <mat-divider></mat-divider>
-      <button mat-flat-button class="text-start w-100" (click)="setPage('product')">
+      <button mat-button class="text-start w-100" (click)="setPage('product4')" color="{{pageName == 'product4' ? 'primary' : 'null'}}">
         Basic
       </button>
       <mat-divider></mat-divider>

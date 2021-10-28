@@ -7,6 +7,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {ConfirmComponent} from "../../dialog/confirm/confirm.component";
 import {MatDialog} from "@angular/material/dialog";
 import {EditProTypeComponent} from "../../dialog/edit-pro-type/edit-pro-type.component";
+import {SwalComponent} from "@sweetalert2/ngx-sweetalert2";
 
 @Component({
   selector: 'app-product-type',
@@ -18,6 +19,9 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<ValueDataType>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  @ViewChild('errored')
+  public readonly erroredSwal!: SwalComponent;
 
   constructor(private http: HttpClient, private dataSer: DataServiceService,public dialog: MatDialog) {
 
@@ -58,16 +62,18 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
         })
     }
   }
-  openDialog(data: ValueDataType): void {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
-      width: '250px',
-      data: data,
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.getTypes()
-    });
+  openDialog(data: SwalComponent): void {
+    data.fire()
+    // const dialogRef = this.dialog.open(ConfirmComponent, {
+    //   width: '250px',
+    //   data: data,
+    // });
+    //
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.getTypes()
+    // });
   }
 
   openDialogEdit(element: ValueDataType) {
@@ -80,6 +86,18 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
       console.log('The dialog was closed');
       this.getTypes()
     });
+  }
+
+  deleteProduct(element: ValueDataType) {
+    this.http.delete(this.dataSer.baseURI + '/api/ProductType/' + element.typeID)
+      .subscribe(value => {
+        // console.log(value)
+        if (typeof value !== undefined){
+          this.getTypes()
+        }
+      }, error => {
+
+      })
   }
 }
 

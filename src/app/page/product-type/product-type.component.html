@@ -44,9 +44,20 @@
         <button mat-icon-button color="accent" (click)="openDialogEdit(element)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="openDialog(element)">
+        <button mat-icon-button color="warn" (click)="openDialog(deleteSwal)">
           <mat-icon >delete</mat-icon>
         </button>
+
+        <swal
+          #deleteSwal
+          title="Delete {{ element.typeName }}?"
+          text="This cannot be undone"
+          icon="question"
+          [showCancelButton]="true"
+          [focusCancel]="true"
+          (confirm)="deleteProduct(element)">
+        </swal>
+
       </td>
     </ng-container>
 

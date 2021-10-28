@@ -29,10 +29,16 @@ export class ProductComponent implements OnInit {
 
   @ViewChild('updated')
   public readonly updatedSwal!: SwalComponent;
+
+  @ViewChild('errored')
+  public readonly erroredSwal!: SwalComponent;
+
   selectFormControl = new FormControl('', Validators.required);
   productEdit: ValueDataProduct | undefined;
   isEdit: boolean = false
-  searchByType: string = 'All'
+  searchPath: string = 'normal'
+  searchText: any;
+  searchKey: string = '/all';
 
   constructor(private http: HttpClient, private dataSer: DataServiceService,) {
     this.dataSource.filterPredicate =
@@ -63,27 +69,27 @@ export class ProductComponent implements OnInit {
   }
 
   getProducts(): void {
-    this.http.get<ResData>(this.dataSer.baseURI + '/api/Product/Get/' + this.searchByType, {headers: this.dataSer.headers})
+    this.http.get<ResData>(this.dataSer.baseURI + '/api/Product/Get/' + this.searchPath + this.searchKey, {headers: this.dataSer.headers})
       .subscribe(value => {
-        console.log(value)
+        // console.log(value)
         this.dataSource = new MatTableDataSource<ValueDataProduct>(value.data);
         this.dataSource.paginator = this.paginator;
       }, error => {
-
+        console.log(error)
       })
   }
 
   getTypes(): void {
     this.http.get<ResDataType>(this.dataSer.baseURI + '/api/ProductType', {headers: this.dataSer.headers})
       .subscribe(value => {
-        console.log(value)
+        // console.log(value)
         this.productTypes = value.data
         if (this.isEdit) {
           this.selectFormControl.setValue(this.productEdit?.typeId)
           this.selectedType = this.productEdit?.typeId
         }
       }, error => {
-
+        console.log(error)
       })
   }
 
@@ -100,7 +106,7 @@ export class ProductComponent implements OnInit {
         proModel: f.value.model.trim(),
         proAmount: f.value.amount
       }
-      console.log(body)
+      // console.log(body)
       if (this.isEdit) {
         this.http.put(this.dataSer.baseURI + '/api/Product/Update', body, {headers: this.dataSer.headers})
           .subscribe(value => {
@@ -110,6 +116,8 @@ export class ProductComponent implements OnInit {
             }
           }, error => {
             // console.log(error)
+            this.erroredSwal.title = error.message + ' ' + error.status
+            this.erroredSwal.fire()
           })
 
       } else {
@@ -121,7 +129,10 @@ export class ProductComponent implements OnInit {
                 this.creactedSwal.fire()
               }
             }, error => {
-
+              console.log(error.status)
+              console.log(error.message)
+              this.erroredSwal.title = error.message + ' ' + error.status
+              this.erroredSwal.fire()
             }
           )
       }
@@ -135,9 +146,6 @@ export class ProductComponent implements OnInit {
       return `${this.dataSer.baseURI}/${serverPath}`;
     }
   }
-  titleSwal: any = '';
-  searchText: any;
-
 
   uploadFile(files: FileList) {
     if (files.length === 0) {
@@ -181,27 +189,38 @@ export class ProductComponent implements OnInit {
           this.getProducts()
         }
       }, error => {
-
+        this.erroredSwal.title = error.message + ' ' + error.status
+        this.erroredSwal.fire()
       })
   }
 
   setSearch(element: ValueDataProduct) {
-    console.log(element)
-    this.searchByType = element.typeId.toString()
+    // console.log(element)
+    this.searchPath = 'type'
+    this.searchKey = '/' + element.typeId.toString()
     this.getProducts()
   }
 
   resetSearch(): void {
-    this.searchByType = 'All'
+    this.searchPath = 'normal'
+    this.searchText = ''
+    this.searchKey = '/all'
     this.getProducts()
   }
 
-  applyFilter(filterValue: Event) {
-    console.log(this.searchText)
-    this.searchText = this.searchText.trim(); // Remove whitespace
-    // filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = this.searchText;
+  onSearch() {
+    this.searchPath = 'normal'
+    this.searchKey = '/' + this.searchText
+    this.getProducts()
   }
+
+  // applyFilter(filterValue: Event) {
+  //   console.log(this.searchText)
+  //   this.searchText = this.searchText.trim(); // Remove whitespace
+  //   // filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+  //   this.dataSource.filter = this.searchText;
+  // }
+
 
 }
 
