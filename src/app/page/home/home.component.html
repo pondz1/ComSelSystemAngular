@@ -16,27 +16,31 @@
 
 <mat-drawer-container class="example-container" hasBackdrop="false" style="height: 100vh">
   <mat-drawer #drawer mode="side" opened>
-<!--    <mat-toolbar color="primary" style="width: 200px">-->
-<!--      Menu-->
-<!--    </mat-toolbar>-->
+    <!--    <mat-toolbar color="primary" style="width: 200px">-->
+    <!--      Menu-->
+    <!--    </mat-toolbar>-->
     <div style="margin-top: 64px"></div>
     <div>
-      <button mat-button class="text-start w-100" (click)="setPage('product')" color="{{pageName == 'product' ? 'primary' : 'null'}}">
-        <mat-icon >inventory_2</mat-icon>
+      <button mat-button class="text-start w-100" (click)="setPage('product')"
+              color="{{pageName == 'product' ? 'primary' : 'null'}}">
+        <mat-icon>inventory_2</mat-icon>
         Product
       </button>
       <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('productType')" color="{{pageName == 'productType' ? 'primary' : 'null'}}">
+      <button mat-button class="text-start w-100" (click)="setPage('productType')"
+              color="{{pageName == 'productType' ? 'primary' : 'null'}}">
         <mat-icon>category</mat-icon>
         Product Type
       </button>
       <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('product3')" color="{{pageName == 'product3' ? 'primary' : 'null'}}">
-        Basic
+      <button mat-button class="text-start w-100" (click)="setPage('customer')"
+              color="{{pageName == 'customer' ? 'primary' : 'null'}}">
+        Customer
       </button>
       <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('product4')" color="{{pageName == 'product4' ? 'primary' : 'null'}}">
-        Basic
+      <button mat-button class="text-start w-100" (click)="setPage('employee')"
+              color="{{pageName == 'employee' ? 'primary' : 'null'}}">
+        Employee
       </button>
       <mat-divider></mat-divider>
     </div>
@@ -50,6 +54,12 @@
       </div>
       <div *ngSwitchCase="'productType'">
         <app-product-type></app-product-type>
+      </div>
+      <div *ngSwitchCase="'customer'">
+        <app-customer></app-customer>
+      </div>
+      <div *ngSwitchCase="'employee'">
+        <app-employee></app-employee>
       </div>
       <div *ngSwitchDefault>
         no page

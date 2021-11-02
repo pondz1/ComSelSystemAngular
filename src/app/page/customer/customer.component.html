@@ -1,0 +1,161 @@
+<div *ngIf="!displayCustomer">
+  <div>
+
+    <div *ngIf="!isEdit; else elseH1">
+      <h1>Add Customer</h1>
+    </div>
+    <ng-template #elseH1>
+      <h1>Edit Customer</h1>
+    </ng-template>
+  </div>
+  <div>
+    <mat-card>
+      <form #f="ngForm" (ngSubmit)="insert(f)">
+        <div class="row">
+
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Name</mat-label>
+              <input name="name" required [ngModel]="customerEdit?.cusFirstName" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Lastname</mat-label>
+              <input name="last" required [ngModel]="customerEdit?.cusLastName" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Address</mat-label>
+              <input name="address" required [ngModel]="customerEdit?.cusAddress" matInput autocomplete="off">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <button mat-flat-button color="primary" type="submit" class="me-2">
+            {{isEdit ? 'Save' : 'Create'}}
+          </button>
+          <button mat-flat-button color="warn" (click)="setDisplayCustomer(true)">
+            Back
+          </button>
+
+          <swal
+            #created
+            title="Create Successfully"
+            icon="success"
+            (confirm)="setDisplayCustomer(true)">
+          </swal>
+
+          <swal
+            #updated
+            title="Update Successfully"
+            icon="success"
+            (confirm)="setDisplayCustomer(true)">
+          </swal>
+
+          <swal
+            #errored
+            title="Error status 400"
+            icon="error"
+          >
+          </swal>
+
+        </div>
+
+      </form>
+
+    </mat-card>
+  </div>
+</div>
+
+
+
+<div *ngIf="displayCustomer">
+  <div>
+    <h1>
+      Customer
+    </h1>
+  </div>
+  <div class="mb-3">
+    <div class="row justify-content-between align-items-baseline">
+      <div class="col">
+        <div class="row align-items-baseline">
+          <div class="col">
+            <mat-form-field class="full-width" appearance="fill">
+              <mat-label>Search</mat-label>
+              <input type="text" name="search" matInput autocomplete="off" [(ngModel)]="searchText">
+            </mat-form-field>
+          </div>
+          <!--          <span class="example-spacer"></span>-->
+          <div class="col">
+            <button mat-flat-button color="primary" class="me-2" (click)="onSearch()">
+              Search
+            </button>
+            <button mat-flat-button color="warn" (click)="resetSearch()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-1">
+        <button mat-flat-button color="primary" (click)="setDisplayCustomer(false)">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="customerID">
+        <th mat-header-cell *matHeaderCellDef style="width: 120px"> customerID</th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{element.customerID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cusFirstName">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.cusFirstName + ' ' + element.cusLastName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cusAddress">
+        <th mat-header-cell *matHeaderCellDef>Address</th>
+        <td mat-cell *matCellDef="let element; let i = index;"> {{element.cusAddress}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="width: 120px">Action</th>
+        <td mat-cell *matCellDef="let element;">
+          <button mat-icon-button color="accent" (click)="setDisplayUpdate(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSwal.fire()">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <swal
+            #deleteSwal
+            title="Delete {{ element.cusFirstName }}?"
+            text="This cannot be undone"
+            icon="question"
+            [showCancelButton]="true"
+            [focusCancel]="true"
+            (confirm)="delete(element)">
+          </swal>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+</div>
+
+

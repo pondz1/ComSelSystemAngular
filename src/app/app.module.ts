@@ -27,6 +27,8 @@ import {MatCardModule} from "@angular/material/card";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { CustomerComponent } from './page/customer/customer.component';
+import { EmployeeComponent } from './page/employee/employee.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     ProductComponent,
     ProductTypeComponent,
     ConfirmComponent,
-    EditProTypeComponent
+    EditProTypeComponent,
+    CustomerComponent,
+    EmployeeComponent
   ],
   imports: [
     BrowserModule,

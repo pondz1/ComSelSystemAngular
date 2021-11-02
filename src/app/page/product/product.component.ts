@@ -111,12 +111,11 @@ export class ProductComponent implements OnInit {
         this.http.put(this.dataSer.baseURI + '/api/Product/Update', body, {headers: this.dataSer.headers})
           .subscribe(value => {
             if (typeof value !== undefined) {
-              this.getProducts()
               this.updatedSwal.fire()
             }
           }, error => {
             // console.log(error)
-            this.erroredSwal.title = error.message + ' ' + error.status
+            this.erroredSwal.title = 'Error code status ' + error.status
             this.erroredSwal.fire()
           })
 
@@ -125,13 +124,12 @@ export class ProductComponent implements OnInit {
           .subscribe(value => {
               if (typeof value !== undefined) {
                 f.resetForm()
-                this.getProducts()
                 this.creactedSwal.fire()
               }
             }, error => {
               console.log(error.status)
               console.log(error.message)
-              this.erroredSwal.title = error.message + ' ' + error.status
+              this.erroredSwal.title = 'Error code status ' + error.status
               this.erroredSwal.fire()
             }
           )
