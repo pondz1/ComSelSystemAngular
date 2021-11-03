@@ -71,7 +71,7 @@ export class ProductComponent implements OnInit {
   getProducts(): void {
     this.http.get<ResData>(this.dataSer.baseURI + '/api/Product/Get/' + this.searchPath + this.searchKey, {headers: this.dataSer.headers})
       .subscribe(value => {
-        // console.log(value)
+        console.log(value)
         this.dataSource = new MatTableDataSource<ValueDataProduct>(value.data);
         this.dataSource.paginator = this.paginator;
       }, error => {

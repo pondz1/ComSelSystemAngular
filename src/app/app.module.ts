@@ -29,6 +29,10 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CustomerComponent } from './page/customer/customer.component';
 import { EmployeeComponent } from './page/employee/employee.component';
+import { ReportComponent } from './page/report/report.component';
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatTreeModule} from "@angular/material/tree";
+import {CdkAccordionModule} from "@angular/cdk/accordion";
 
 @NgModule({
   declarations: [
@@ -39,7 +43,8 @@ import { EmployeeComponent } from './page/employee/employee.component';
     ConfirmComponent,
     EditProTypeComponent,
     CustomerComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +68,10 @@ import { EmployeeComponent } from './page/employee/employee.component';
     MatCardModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    MatTabsModule,
+    MatTreeModule,
+    CdkAccordionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

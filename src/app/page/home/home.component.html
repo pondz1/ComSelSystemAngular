@@ -43,6 +43,11 @@
         Employee
       </button>
       <mat-divider></mat-divider>
+      <button mat-button class="text-start w-100" (click)="setPage('report')"
+              color="{{pageName == 'report' ? 'primary' : 'null'}}">
+        Report
+      </button>
+      <mat-divider></mat-divider>
     </div>
   </mat-drawer>
   <mat-drawer-content>
@@ -60,6 +65,9 @@
       </div>
       <div *ngSwitchCase="'employee'">
         <app-employee></app-employee>
+      </div>
+      <div *ngSwitchCase="'report'">
+        <app-report></app-report>
       </div>
       <div *ngSwitchDefault>
         no page
