@@ -1,0 +1,163 @@
+<div *ngIf="!displayProductSet">
+  <app-product-set (setDisplayProductSet)="setDisplayProduct(true)" (getProGroup)="getProGroup()"></app-product-set>
+</div>
+<div *ngIf="displayProductSet">
+  <div>
+    <h1>
+      Product Set
+    </h1>
+  </div>
+
+  <div class="mb-3">
+    <div class="row justify-content-between align-items-baseline">
+      <!--          <div class="col">-->
+      <!--            <div class="row align-items-baseline">-->
+      <!--              <div class="col">-->
+      <!--                <mat-form-field class="full-width" appearance="fill">-->
+      <!--                  <mat-label>Search</mat-label>-->
+      <!--                  <input type="text" name="search" matInput autocomplete="off" [(ngModel)]="searchText">-->
+      <!--                </mat-form-field>-->
+      <!--              </div>-->
+      <!--              &lt;!&ndash;          <span class="example-spacer"></span>&ndash;&gt;-->
+      <!--              <div class="col">-->
+      <!--                <button mat-flat-button color="primary" class="me-2" (click)="onSearch()">-->
+      <!--                  Search-->
+      <!--                </button>-->
+      <!--                <button mat-flat-button color="warn" (click)="resetSearch()">-->
+      <!--                  Reset-->
+      <!--                </button>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <div class="col-1">
+        <button mat-flat-button color="primary" (click)="setDisplayProduct(false)">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+  <!--  <div class="mat-elevation-z8">-->
+
+  <mat-accordion>
+
+
+    <mat-expansion-panel hideToggle *ngFor="let item of dataProGroup; let index = index" (opened)="onOpen(item,index)">
+      <mat-expansion-panel-header >
+
+        <mat-panel-title>
+          {{item.pgName}}
+        </mat-panel-title>
+        <div>
+          <label>
+            ${{item.pgPrice.toLocaleString()}}
+          </label>
+          <label class="ms-2" *ngIf="item.pgStatus" style="color: green">Approved</label>
+          <label class="ms-2" *ngIf="!item.pgStatus"  style="color: red">Disapproved</label>
+        </div>
+
+      </mat-expansion-panel-header>
+      <!--      <p>This is the primary content of the panel.</p>-->
+
+      <table mat-table [dataSource]="dataSource">
+
+
+        <ng-container matColumnDef="productId">
+          <th mat-header-cell *matHeaderCellDef> Product Id</th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{element.product.productId}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="proName">
+          <th mat-header-cell *matHeaderCellDef> Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.product.proName}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="proAmount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element"> {{element.productAmount.toLocaleString()}} </td>
+          <td mat-footer-cell *matFooterCellDef>Total </td>
+        </ng-container>
+
+        <ng-container matColumnDef="proPrice">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let element; let i = index;"> ${{(element.product.proPrice * element.productAmount).toLocaleString()}}</td>
+          <td mat-footer-cell *matFooterCellDef><i>${{sumPrice.toLocaleString()}}</i></td>
+        </ng-container>
+
+        <!--              <ng-container matColumnDef="proType">-->
+        <!--                <th mat-header-cell *matHeaderCellDef>Type</th>-->
+        <!--                <td mat-cell *matCellDef="let element; let i = index;">-->
+        <!--                  <button mat-button color="primary" (click)="setSearch(element)">{{element.proType.typeName}}</button>-->
+        <!--                </td>-->
+        <!--              </ng-container>-->
+
+        <!--              <ng-container matColumnDef="proBrand">-->
+        <!--                <th mat-header-cell *matHeaderCellDef> Brand</th>-->
+        <!--                <td mat-cell *matCellDef="let element"> {{element.proBrand}} </td>-->
+        <!--              </ng-container>-->
+
+        <!--              <ng-container matColumnDef="proModel">-->
+        <!--                <th mat-header-cell *matHeaderCellDef> Model</th>-->
+        <!--                <td mat-cell *matCellDef="let element"> {{element.proModel}} </td>-->
+        <!--              </ng-container>-->
+
+        <!--              <ng-container matColumnDef="proDetail">-->
+        <!--                <th mat-header-cell *matHeaderCellDef style="width: 370px"> Detail</th>-->
+        <!--                <td mat-cell *matCellDef="let element"><label class="pt-2 pb-2">{{element.proDetail}}</label></td>-->
+        <!--              </ng-container>-->
+
+        <!--              <ng-container matColumnDef="action">-->
+        <!--                <th mat-header-cell *matHeaderCellDef style="width: 120px">Action</th>-->
+        <!--                <td mat-cell *matCellDef="let element;">-->
+        <!--                  <button mat-icon-button color="accent" (click)="setDisplayUpdate(false, true, element)">-->
+        <!--                    <mat-icon>edit</mat-icon>-->
+        <!--                  </button>-->
+        <!--                  <button mat-icon-button color="warn" (click)="deleteSwal.fire()">-->
+        <!--                    <mat-icon>delete</mat-icon>-->
+        <!--                  </button>-->
+        <!--                  <swal-->
+        <!--                    #deleteSwal-->
+        <!--                    title="Delete {{ element.proName }}?"-->
+        <!--                    text="This cannot be undone"-->
+        <!--                    icon="question"-->
+        <!--                    [showCancelButton]="true"-->
+        <!--                    [focusCancel]="true"-->
+        <!--                    (confirm)="deleteProduct(element)">-->
+        <!--                  </swal>-->
+
+        <!--                </td>-->
+        <!--              </ng-container>-->
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        <!--        <tr mat-footer-row *matFooterRowDef="columnsToDisplay"></tr>-->
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+
+      </mat-paginator>
+
+    </mat-expansion-panel>
+
+    <!--      <mat-expansion-panel (opened)="panelOpenState = true"-->
+    <!--                           (closed)="panelOpenState = false">-->
+    <!--        <mat-expansion-panel-header>-->
+    <!--          <mat-panel-title>-->
+    <!--            Self aware panel-->
+    <!--          </mat-panel-title>-->
+    <!--          <mat-panel-description>-->
+    <!--            Currently I am {{panelOpenState ? 'open' : 'closed'}}-->
+    <!--          </mat-panel-description>-->
+    <!--        </mat-expansion-panel-header>-->
+    <!--        <p>I'm visible because I am open</p>-->
+    <!--      </mat-expansion-panel>-->
+  </mat-accordion>
+
+
+</div>
+<!--</div>-->

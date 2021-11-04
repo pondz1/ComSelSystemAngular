@@ -33,6 +33,14 @@ import { ReportComponent } from './page/report/report.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatTreeModule} from "@angular/material/tree";
 import {CdkAccordionModule} from "@angular/cdk/accordion";
+import { ProductSetComponent } from './page/product-set/product-set.component';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {ScrollingModule} from "@angular/cdk/scrolling";
+import {MatSliderModule} from "@angular/material/slider";
+import { ProductSetListComponent } from './page/product-set-list/product-set-list.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -44,35 +52,40 @@ import {CdkAccordionModule} from "@angular/cdk/accordion";
     EditProTypeComponent,
     CustomerComponent,
     EmployeeComponent,
-    ReportComponent
+    ReportComponent,
+    ProductSetComponent,
+    ProductSetListComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDividerModule,
-    MatTableModule,
-    HttpClientModule,
-    MatPaginatorModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    SweetAlert2Module.forRoot(),
-    MatTabsModule,
-    MatTreeModule,
-    CdkAccordionModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatDividerModule,
+        MatTableModule,
+        HttpClientModule,
+        MatPaginatorModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatCardModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        SweetAlert2Module.forRoot(),
+        MatTabsModule,
+        MatTreeModule,
+        CdkAccordionModule,
+        DragDropModule,
+        ScrollingModule,
+        MatExpansionModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

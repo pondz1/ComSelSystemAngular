@@ -33,6 +33,11 @@
         Product Type
       </button>
       <mat-divider></mat-divider>
+      <button mat-button class="text-start w-100" (click)="setPage('productSet')"
+              color="{{pageName == 'productSet' ? 'primary' : 'null'}}">
+        Product Set
+      </button>
+      <mat-divider></mat-divider>
       <button mat-button class="text-start w-100" (click)="setPage('customer')"
               color="{{pageName == 'customer' ? 'primary' : 'null'}}">
         Customer
@@ -48,6 +53,7 @@
         Report
       </button>
       <mat-divider></mat-divider>
+
     </div>
   </mat-drawer>
   <mat-drawer-content>
@@ -68,6 +74,9 @@
       </div>
       <div *ngSwitchCase="'report'">
         <app-report></app-report>
+      </div>
+      <div *ngSwitchCase="'productSet'">
+        <app-product-set-list></app-product-set-list>
       </div>
       <div *ngSwitchDefault>
         no page

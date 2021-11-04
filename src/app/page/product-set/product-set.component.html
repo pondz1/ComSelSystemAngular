@@ -1,0 +1,110 @@
+<div>
+  <div class="row">
+    <div class="example-container col">
+      <h2>All Products</h2>
+      <div>
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Search</mat-label>
+          <input type="text" name="search" matInput
+                 autocomplete="off"
+                 [(ngModel)]="searchText"
+                 (input)="onChange($event)"
+          >
+        </mat-form-field>
+      </div>
+
+      <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+
+        <div
+          cdkDropList
+          #todoList="cdkDropList"
+          [cdkDropListData]="allProducts"
+          [cdkDropListConnectedTo]="[doneList]"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of allProducts" cdkDrag
+               [cdkDragDisabled]="item.proAmount <= 0">
+            <label *ngIf="item.proAmount > 0">{{item.proName}}
+              [ <label style="color: green">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+            <label *ngIf="item.proAmount <= 0">{{item.proName}}
+              [ <label style="color: red">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+          </div>
+        </div>
+
+      </cdk-virtual-scroll-viewport>
+
+    </div>
+
+    <div class="example-container col">
+      <h2>Products Set</h2>
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="products"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box2"
+             *ngFor="let item of products; let index=index"
+             cdkDrag>
+          <div>
+            <label *ngIf="item.proAmount > 0">{{item.proName}}
+              [ <label style="color: green">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+            <label *ngIf="item.proAmount <= 0">{{item.proName}}
+              [ <label style="color: red">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+          </div>
+          <br/>
+          <div>
+            <select
+              name="amount-{{index}}" id="amounts-{{index}}"
+              (change)="onChangeSelect($event)"
+              [(ngModel)]="amounts[index]"
+            >
+              <option *ngFor="let myItem of getList(item.proAmount)" [ngValue]="myItem.value">
+                {{myItem.name}}
+              </option>
+            </select>
+            <label class="ps-3">Price : {{(item.proPrice * amounts[index]).toLocaleString()}}</label>
+          </div>
+
+        </div>
+      </div>
+      <div>
+        <div class="row justify-content-end" style="text-align: end">
+          <!--          <div class="col-3" style="background-color: green; ">-->
+          <h5 class="pe-3"><b>Price : {{sumPrice().toLocaleString()}}</b></h5>
+          <!--          </div>-->
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="mt-5">
+        <form #f="ngForm" (ngSubmit)="onInsert(f)">
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" name="nameSet" required
+                   ngModel matInput autocomplete="off">
+          </mat-form-field>
+          <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Price</mat-label>
+            <input type="number" name="price" required
+                   ngModel matInput autocomplete="off">
+          </mat-form-field>
+          <button mat-raised-button class="me-2" type="submit" color="primary">Create</button>
+          <button mat-raised-button color="warn" (click)="goBack()">Back</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <swal
+    #created
+    title="Create Successfully"
+    icon="success"
+    (confirm)="onSuccess()"
+  >
+
+  </swal>
+
+</div>

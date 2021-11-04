@@ -21,7 +21,7 @@ export class ReportComponent implements OnInit {
   inventReport: InventReport[] = []
   dataSourceProduct: any = new MatTableDataSource<ValueDataProduct>();
   displayedColumnsProduct: string[] = ['proImage', 'productId', 'proName', 'proAmount',
-    'proPrice', 'proBrand', 'proModel', 'proDetail'];
+    'proPrice', 'proBrand', 'proModel'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
