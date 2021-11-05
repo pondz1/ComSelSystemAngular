@@ -75,7 +75,7 @@
           <div class="col">
             <mat-form-field class="full-width" appearance="fill">
               <mat-label>Product Amount</mat-label>
-              <input name="amount" required [ngModel]="productEdit?.proAmount" matInput autocomplete="off">
+              <input name="amount" type="number" required [ngModel]="productEdit?.proAmount" matInput autocomplete="off">
             </mat-form-field>
           </div>
         </div>
@@ -111,13 +111,6 @@
             (confirm)="setDisplayProduct(true)">
           </swal>
 
-          <swal
-            #errored
-            title="Error status 400"
-            icon="error"
-          >
-          </swal>
-
         </div>
 
       </form>
@@ -125,6 +118,12 @@
     </mat-card>
   </div>
 </div>
+<swal
+  #errored
+  title="Error status 400"
+  icon="error"
+>
+</swal>
 <div *ngIf="displayProduct">
   <div>
     <h1>

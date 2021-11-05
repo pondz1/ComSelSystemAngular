@@ -1,7 +1,11 @@
 <div>
   <div class="row">
+    <div>
+      <h1 *ngIf="productGroup == undefined">Add</h1>
+      <h1 *ngIf="productGroup != undefined">Edit</h1>
+    </div>
     <div class="example-container col">
-      <h2>All Products</h2>
+      <h4>All Products</h4>
       <div>
         <mat-form-field class="full-width" appearance="fill">
           <mat-label>Search</mat-label>
@@ -36,9 +40,10 @@
     </div>
 
     <div class="example-container col">
-      <h2>Products Set</h2>
+      <h4>Products Set</h4>
       <div
         cdkDropList
+        cdkDropListSortingDisabled
         #doneList="cdkDropList"
         [cdkDropListData]="products"
         [cdkDropListConnectedTo]="[todoList]"
@@ -83,14 +88,14 @@
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Name</mat-label>
             <input type="text" name="nameSet" required
-                   ngModel matInput autocomplete="off">
+                   [ngModel]="productGroup?.pgName" matInput autocomplete="off">
           </mat-form-field>
           <mat-form-field class="full-width" appearance="fill">
             <mat-label>Price</mat-label>
             <input type="number" name="price" required
-                   ngModel matInput autocomplete="off">
+                   [ngModel]="productGroup?.pgPrice" matInput autocomplete="off">
           </mat-form-field>
-          <button mat-raised-button class="me-2" type="submit" color="primary">Create</button>
+          <button mat-raised-button class="me-2" type="submit" color="primary">{{productGroup != undefined ? 'Save' : 'Create'}}</button>
           <button mat-raised-button color="warn" (click)="goBack()">Back</button>
         </form>
       </div>
@@ -105,6 +110,20 @@
     (confirm)="onSuccess()"
   >
 
+  </swal>
+
+  <swal
+    #updated
+    title="Update Successfully"
+    icon="success"
+    (confirm)="goBack()">
+  </swal>
+
+  <swal
+    #errored
+    title="Error status 400"
+    icon="error"
+  >
   </swal>
 
 </div>

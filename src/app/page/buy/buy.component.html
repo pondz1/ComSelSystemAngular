@@ -1,0 +1,140 @@
+<div class="row">
+  <div class="mt-1">
+    <h1>Shop</h1>
+  </div>
+
+  <div class="example-container col ">
+    <h3>All Products</h3>
+    <div class="row align-items-baseline">
+      <div class="col">
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Search</mat-label>
+          <input type="text" name="search" matInput
+                 autocomplete="off"
+                 [(ngModel)]="searchText"
+          >
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label> Product Type</mat-label>
+          <mat-select [formControl]="selectFormControl" [(value)]="selectedType">
+            <mat-option value="-1">All</mat-option>
+            <mat-option *ngFor="let type of productTypes" [value]="type.typeID">
+              {{type.typeName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <button mat-raised-button color="primary" (click)="onSearch()">Search</button>
+      </div>
+    </div>
+
+    <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="allProducts"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+        <div class="example-box" *ngFor="let item of allProducts" cdkDrag
+             [cdkDragDisabled]="item.proAmount <= 0">
+          <label *ngIf="item.proAmount > 0">{{item.proName}}
+            [ <label style="color: green">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+          <label *ngIf="item.proAmount <= 0">{{item.proName}}
+            [ <label style="color: red">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+        </div>
+      </div>
+
+    </cdk-virtual-scroll-viewport>
+
+  </div>
+
+  <div class="example-container col">
+    <h3>Shopping Cart</h3>
+    <div
+      cdkDropList
+      cdkDropListSortingDisabled
+      #doneList="cdkDropList"
+      [cdkDropListData]="products"
+      [cdkDropListConnectedTo]="[todoList]"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="example-box2"
+           *ngFor="let item of products; let index=index"
+           cdkDrag>
+        <div>
+          <label *ngIf="item.proAmount > 0">{{item.proName}}
+            [ <label style="color: green">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+          <label *ngIf="item.proAmount <= 0">{{item.proName}}
+            [ <label style="color: red">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
+        </div>
+        <br/>
+        <div>
+          <select
+            name="amount-{{index}}" id="amounts-{{index}}"
+            [(ngModel)]="amounts[index]"
+          >
+            <option *ngFor="let myItem of getList(item.proAmount)" [ngValue]="myItem.value">
+              {{myItem.name}}
+            </option>
+          </select>
+          <label class="ps-3">Price : {{(item.proPrice * amounts[index]).toLocaleString()}}</label>
+        </div>
+
+      </div>
+    </div>
+    <div>
+      <div class="row justify-content-end" style="text-align: end">
+        <!--          <div class="col-3" style="background-color: green; ">-->
+        <h5 class="pe-3"><b>Price : {{getSumPrice().toLocaleString()}}</b></h5>
+        <!--          </div>-->
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="mt-5">
+      <div>
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Customer Search</mat-label>
+          <input type="text" [(ngModel)]="customerTextSearch" matInput autocomplete="off"
+                 (ngModelChange)="onFilter($event)">
+        </mat-form-field>
+      </div>
+      <form #f="ngForm" (ngSubmit)="onInsert(f)">
+
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Customer</mat-label>
+          <mat-select [formControl]="selectCustomerFormControl" required [(value)]="selectedCustomer">
+            <mat-option *ngFor="let cus of customerList" [value]="cus.customerID">
+              {{cus.cusFirstName + ' ' + cus.cusLastName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+<!--        <mat-form-field class="full-width" appearance="fill">-->
+<!--          <mat-label>Discount(%)</mat-label>-->
+<!--          <input type="number" name="coupon" required-->
+<!--                 [ngModel]="productBuy?.coupon" matInput autocomplete="off" [maxlength]="3" max="100" min="0" (ngModelChange)="onDiscount()">-->
+<!--        </mat-form-field>-->
+
+        <div class="mb-3">
+          <label>for sale : <b>{{sumPrice}}</b></label>
+        </div>
+
+        <button mat-raised-button class="me-2" type="submit" color="primary">Check out</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<swal
+  #created
+  title="Create Successfully"
+  icon="success"
+  (confirm)="onSuccess()">
+</swal>

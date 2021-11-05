@@ -41,6 +41,7 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
 import {MatSliderModule} from "@angular/material/slider";
 import { ProductSetListComponent } from './page/product-set-list/product-set-list.component';
 import {MatExpansionModule} from "@angular/material/expansion";
+import { BuyComponent } from './page/buy/buy.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     EmployeeComponent,
     ReportComponent,
     ProductSetComponent,
-    ProductSetListComponent
+    ProductSetListComponent,
+    BuyComponent
   ],
     imports: [
         BrowserModule,
