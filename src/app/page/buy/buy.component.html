@@ -40,8 +40,10 @@
         [cdkDropListConnectedTo]="[doneList]"
         class="example-list"
         (cdkDropListDropped)="drop($event)">
-        <div class="example-box" *ngFor="let item of allProducts" cdkDrag
-             [cdkDragDisabled]="item.proAmount <= 0">
+        <div class="example-box" *ngFor="let item of allProducts" cdkDrag matTooltip="{{item.proBrand + ' : ' + item.proModel + ' : ' + item.proDetail}}"
+             [cdkDragDisabled]="item.proAmount <= 0 || isProductImport">
+          <img *ngIf="item.proImage != null;" [src]="createImgPath(item.proImage)"
+               alt="product picture" style="width: 50px; height:50px; object-fit: contain">
           <label *ngIf="item.proAmount > 0">{{item.proName}}
             [ <label style="color: green">{{item.proAmount.toLocaleString()}}</label> Item ]</label>
           <label *ngIf="item.proAmount <= 0">{{item.proName}}
@@ -55,6 +57,10 @@
 
   <div class="example-container col">
     <h3>Shopping Cart</h3>
+    <div style="display: flex;justify-content: end">
+      <button class="me-2 mb-1" mat-raised-button (click)="openDialog()">Pick Set</button>
+      <button class="me-2 mb-1" color="warn" mat-raised-button (click)="reset()">Reset</button>
+    </div>
     <div
       cdkDropList
       cdkDropListSortingDisabled
@@ -63,8 +69,9 @@
       [cdkDropListConnectedTo]="[todoList]"
       class="example-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="example-box2"
+      <div class="example-box2" matTooltip="{{item.proBrand + ' : ' + item.proModel + ' : ' + item.proDetail}}"
            *ngFor="let item of products; let index=index"
+           [cdkDragDisabled]="isProductImport"
            cdkDrag>
         <div>
           <label *ngIf="item.proAmount > 0">{{item.proName}}
@@ -77,6 +84,7 @@
           <select
             name="amount-{{index}}" id="amounts-{{index}}"
             [(ngModel)]="amounts[index]"
+            [disabled]="isProductImport"
           >
             <option *ngFor="let myItem of getList(item.proAmount)" [ngValue]="myItem.value">
               {{myItem.name}}
@@ -104,7 +112,16 @@
                  (ngModelChange)="onFilter($event)">
         </mat-form-field>
       </div>
-      <form #f="ngForm" (ngSubmit)="onInsert(f)">
+      <form #f="ngForm" (ngSubmit)="confirmOrder()">
+
+        <swal
+          #confirmSwal
+          title="Confirm this order ?"
+          icon="question"
+          [showCancelButton]="true"
+          [focusCancel]="true"
+          (confirm)="onInsert(f)">
+        </swal>
 
         <mat-form-field class="full-width" appearance="fill">
           <mat-label>Customer</mat-label>
@@ -122,11 +139,14 @@
 <!--        </mat-form-field>-->
 
         <div class="mb-3">
-          <label>for sale : <b>{{sumPrice}}</b></label>
+          <label>for sale : <b>{{sumPrice.toLocaleString()}}</b></label>
         </div>
 
         <button mat-raised-button class="me-2" type="submit" color="primary">Check out</button>
       </form>
+
+
+
     </div>
   </div>
 
@@ -138,3 +158,9 @@
   icon="success"
   (confirm)="onSuccess()">
 </swal>
+
+<swal
+  #errored
+  title="Error status 400"
+  icon="error"
+></swal>

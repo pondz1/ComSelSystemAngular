@@ -34,14 +34,17 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {MatTreeModule} from "@angular/material/tree";
 import {CdkAccordionModule} from "@angular/cdk/accordion";
 import { ProductSetComponent } from './page/product-set/product-set.component';
-import {MatChipsModule} from "@angular/material/chips";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {ScrollingModule} from "@angular/cdk/scrolling";
-import {MatSliderModule} from "@angular/material/slider";
 import { ProductSetListComponent } from './page/product-set-list/product-set-list.component';
 import {MatExpansionModule} from "@angular/material/expansion";
 import { BuyComponent } from './page/buy/buy.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { BottomSheetSetComponent } from './BottomSheet/bottom-sheet-set/bottom-sheet-set.component';
+import {MatListModule} from "@angular/material/list";
+import { ReportCustomerComponent } from './page/report-customer/report-customer.component';
+import { ProductBuyListComponent } from './BottomSheet/product-buy-list/product-buy-list.component';
+import { ReportSalesRevenueComponent } from './page/report-sales-revenue/report-sales-revenue.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,11 @@ import { BuyComponent } from './page/buy/buy.component';
     ReportComponent,
     ProductSetComponent,
     ProductSetListComponent,
-    BuyComponent
+    BuyComponent,
+    BottomSheetSetComponent,
+    ReportCustomerComponent,
+    ProductBuyListComponent,
+    ReportSalesRevenueComponent
   ],
     imports: [
         BrowserModule,
@@ -87,6 +94,8 @@ import { BuyComponent } from './page/buy/buy.component';
         DragDropModule,
         ScrollingModule,
         MatExpansionModule,
+        MatTooltipModule,
+        MatListModule,
     ],
   providers: [],
   bootstrap: [AppComponent]

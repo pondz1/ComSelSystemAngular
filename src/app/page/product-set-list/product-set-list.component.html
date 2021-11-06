@@ -85,7 +85,7 @@
 
         <div style="display: flex; justify-content: end;align-items: baseline">
           <!--        <label>Status :</label>-->
-          <button mat-stroked-button color="{{!item.pgStatus ? 'primary' : 'warn'}}" class="ms-2"
+          <button *ngIf="dService.selectedType == 0" mat-stroked-button color="{{!item.pgStatus ? 'primary' : 'warn'}}" class="ms-2"
                   (click)="toggleUpdateStatus(item)">{{!item.pgStatus ? 'Approve' : 'Disapprove'}}</button>
 
           <button mat-stroked-button color="accent" class="ms-2"
@@ -184,27 +184,12 @@
           <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
           <!--        <tr mat-footer-row *matFooterRowDef="columnsToDisplay"></tr>-->
         </table>
-
         <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                        showFirstLastButtons
                        aria-label="Select page of periodic elements">
 
         </mat-paginator>
-
       </mat-expansion-panel>
-
-      <!--      <mat-expansion-panel (opened)="panelOpenState = true"-->
-      <!--                           (closed)="panelOpenState = false">-->
-      <!--        <mat-expansion-panel-header>-->
-      <!--          <mat-panel-title>-->
-      <!--            Self aware panel-->
-      <!--          </mat-panel-title>-->
-      <!--          <mat-panel-description>-->
-      <!--            Currently I am {{panelOpenState ? 'open' : 'closed'}}-->
-      <!--          </mat-panel-description>-->
-      <!--        </mat-expansion-panel-header>-->
-      <!--        <p>I'm visible because I am open</p>-->
-      <!--      </mat-expansion-panel>-->
     </mat-accordion>
     <div *ngIf="dataProGroup.length <= 0">
       <label>no data</label>

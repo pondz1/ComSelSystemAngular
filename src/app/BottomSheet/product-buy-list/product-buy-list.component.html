@@ -1,0 +1,53 @@
+<h1 mat-dialog-title>Buy ProductID {{data.productBuyItems[0].productBuyID}}</h1>
+<div mat-dialog-content>
+  <p></p>
+  <div>
+
+    <mat-list role="list">
+
+      <mat-list-item role="listitem">
+        <div class="row w-100 align-items-center">
+          <div class="col">
+            <label>Product</label>
+          </div>
+          <div class="col">
+            <label>Amount</label>
+          </div>
+          <div class="col">
+            <label>Price</label>
+          </div>
+          <div class="col">
+            <label>Sum</label>
+          </div>
+        </div>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem" *ngFor="let item of productBuyItems">
+        <div class="row w-100 align-items-center">
+          <div class="col">
+            <label>{{item.product?.proName}}</label>
+          </div>
+          <div class="col">
+            <label>{{item.buyAmount.toLocaleString()}}</label>
+          </div>
+          <div class="col">
+            <label>${{item.buyCurrentPrice.toLocaleString()}}</label>
+          </div>
+          <div class="col">
+            <label>${{(item.buyAmount * item.buyCurrentPrice).toLocaleString()}}</label>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+      <mat-list-item>
+       <label> <b>Total</b> : <i>${{sumPrice.toLocaleString()}}</i></label>
+<!--        <mat-divider></mat-divider>-->
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <!--  <button mat-button (click)="onNoClick()">No Thanks</button>-->
+  <button mat-stroked-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

@@ -34,13 +34,13 @@ export class ProductSetComponent implements OnInit {
   @Input() public productSets?: ProductSet[]
 
   constructor(private http: HttpClient, private dService: DataServiceService) {
-    // console.log('add')
+    // // console.log('add')
   }
 
   ngOnInit(): void {
     this.getProducts()
     if (this.productGroup) {
-      console.log(this.productGroup)
+      // console.log(this.productGroup)
     }
   }
 
@@ -51,8 +51,8 @@ export class ProductSetComponent implements OnInit {
   getProducts(): void {
     this.http.get<ResDataProduct>(this.dService.baseURI + '/api/Product/Get/' + 'normal' + '/all', {headers: this.dService.headers})
       .subscribe(value => {
-        // console.log(value)
-        // console.log(this.products)
+        // // console.log(value)
+        // // console.log(this.products)
         if (typeof this.productSets != undefined) {
           this.productSets?.map((value, index) => {
             this.amounts[index] = value.productAmount
@@ -63,7 +63,7 @@ export class ProductSetComponent implements OnInit {
         this.allProducts = difference
         this.allProductsClone = difference
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
@@ -80,8 +80,8 @@ export class ProductSetComponent implements OnInit {
       );
     }
     this.amounts = this.products.map(value => 1)
-    // console.log(this.products)
-    // console.log(this.amounts)
+    // // console.log(this.products)
+    // // console.log(this.amounts)
   }
 
   private _filter(value: string): ValueDataProduct[] {
@@ -91,7 +91,7 @@ export class ProductSetComponent implements OnInit {
   }
 
   onChange(event: Event) {
-    // console.log(this.searchText)
+    // // console.log(this.searchText)
     this.allProducts = this._filter(this.searchText)
     if (this.searchText == '') {
       this.allProducts = this.allProductsClone.slice()
@@ -107,14 +107,14 @@ export class ProductSetComponent implements OnInit {
   }
 
   onChangeSelect(event: Event) {
-    // console.log(event)
-    // console.log(this.amounts)
+    // // console.log(event)
+    // // console.log(this.amounts)
   }
 
   onInsert(f: NgForm) {
 
     if (f.valid && this.products.length > 0) {
-      // console.log(this.productGroup)
+      // // console.log(this.productGroup)
       let body = {
         pgid: this.productGroup?.pgid,
         pgName: f.value.nameSet,
@@ -130,20 +130,20 @@ export class ProductSetComponent implements OnInit {
         })
       }
 
-      console.log(body)
-      // console.log(this.amounts)
+      // console.log(body)
+      // // console.log(this.amounts)
       if (this.productGroup != undefined) {
         this.deleteOldProSet().subscribe(value => {
           this.http.put(this.dService.baseURI + '/api/ProGroup/Update', body, {headers: this.dService.headers})
             .subscribe(value => {
               if (typeof value != undefined) {
                 // this.getProGroup()
-                console.log(value)
+                // console.log(value)
                 this.updatedSwal.fire()
                 // this.goBack()
               }
             }, error => {
-              console.log(error)
+              // console.log(error)
               this.erroredSwal.title = 'Error code status ' + error.status
               this.erroredSwal.fire()
             })
@@ -151,7 +151,7 @@ export class ProductSetComponent implements OnInit {
       } else {
         this.http.post(this.dService.baseURI + '/api/ProGroup/Insert', body, {headers: this.dService.headers})
           .subscribe(value => {
-            console.log(value)
+            // console.log(value)
             if (typeof value != undefined) {
               this.creactedSwal.fire()
               f.resetForm()

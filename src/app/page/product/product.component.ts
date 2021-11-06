@@ -46,11 +46,11 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.displayProduct) {
+    // if (this.displayProduct) {
       this.getProducts()
-    } else {
+    // } else {
       this.getTypes()
-    }
+    // }
   }
 
   setDisplayProduct(value: boolean): void {
@@ -71,25 +71,25 @@ export class ProductComponent implements OnInit {
   getProducts(): void {
     this.http.get<ResData>(this.dataSer.baseURI + '/api/Product/Get/' + this.searchPath + this.searchKey, {headers: this.dataSer.headers})
       .subscribe(value => {
-        console.log(value)
+        // console.log(value)
         this.dataSource = new MatTableDataSource<ValueDataProduct>(value.data);
         this.dataSource.paginator = this.paginator;
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
   getTypes(): void {
     this.http.get<ResDataType>(this.dataSer.baseURI + '/api/ProductType', {headers: this.dataSer.headers})
       .subscribe(value => {
-        // console.log(value)
+        // // console.log(value)
         this.productTypes = value.data
         if (this.isEdit) {
           this.selectFormControl.setValue(this.productEdit?.typeId)
           this.selectedType = this.productEdit?.typeId
         }
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
@@ -106,7 +106,7 @@ export class ProductComponent implements OnInit {
         proModel: f.value.model.trim(),
         proAmount: f.value.amount
       }
-      // console.log(body)
+      // // console.log(body)
       if (this.isEdit) {
         this.http.put(this.dataSer.baseURI + '/api/Product/Update', body, {headers: this.dataSer.headers})
           .subscribe(value => {
@@ -114,7 +114,7 @@ export class ProductComponent implements OnInit {
               this.updatedSwal.fire()
             }
           }, error => {
-            // console.log(error)
+            // // console.log(error)
             this.erroredSwal.title = error.error.message + ' ' + error.status
             this.erroredSwal.fire()
           })
@@ -127,8 +127,8 @@ export class ProductComponent implements OnInit {
                 this.creactedSwal.fire()
               }
             }, error => {
-              // console.log(error.status)
-              // console.log(error.message)
+              // // console.log(error.status)
+              // // console.log(error.message)
               this.erroredSwal.title = error.error.message + ' ' + error.status
               this.erroredSwal.fire()
             }
@@ -160,7 +160,7 @@ export class ProductComponent implements OnInit {
               this.progress = Math.round(100 * event.loaded / event.total);
             }
           } else if (event.type === HttpEventType.Response) {
-            console.log(event.body)
+            // console.log(event.body)
             this.dbPath = event.body as DbPath;
             // this.onUploadFinished.emit(event.body);
           }
@@ -174,7 +174,7 @@ export class ProductComponent implements OnInit {
       this.dbPath = {
         dbPath: element.proImage
       }
-      console.log(this.dbPath)
+      // console.log(this.dbPath)
       this.productEdit = element
     }
     this.setDisplayProduct(b)
@@ -187,15 +187,15 @@ export class ProductComponent implements OnInit {
           this.getProducts()
         }
       }, error => {
-        console.log(error)
-        console.log(this.erroredSwal)
+        // console.log(error)
+        // console.log(this.erroredSwal)
         this.erroredSwal.title = error.error.message + ' ' + error.status
         this.erroredSwal.fire()
       })
   }
 
   setSearch(element: ValueDataProduct) {
-    // console.log(element)
+    // // console.log(element)
     this.searchPath = 'type'
     this.searchKey = '/' + element.typeId.toString()
     this.getProducts()
@@ -209,13 +209,27 @@ export class ProductComponent implements OnInit {
   }
 
   onSearch() {
-    this.searchPath = 'normal'
-    this.searchKey = '/' + this.searchText
-    this.getProducts()
+    // this.searchPath = 'normal'
+    // this.searchKey = '/' + this.searchText
+    // this.getProducts()
+
+    let body = {
+      productType: this.selectedType ?? -1,
+      keyword: this.searchText ?? ""
+    }
+    // console.log(body)
+    this.http.post<ResData>(this.dataSer.baseURI + '/api/Product/Search', body, {headers: this.dataSer.headers})
+      .subscribe(value => {
+        this.dataSource = new MatTableDataSource<ValueDataProduct>(value.data);
+        this.dataSource.paginator = this.paginator;
+      }, error => {
+        // console.log(error)
+      })
+
   }
 
   // applyFilter(filterValue: Event) {
-  //   console.log(this.searchText)
+  //   // console.log(this.searchText)
   //   this.searchText = this.searchText.trim(); // Remove whitespace
   //   // filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
   //   this.dataSource.filter = this.searchText;

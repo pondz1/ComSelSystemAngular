@@ -6,14 +6,23 @@ import {HttpClient} from "@angular/common/http";
 import {DataServiceService} from "../../service/data-service.service";
 import {ValueDataType} from "../product-type/product-type.component";
 import {CustomerValue} from "../customer/customer.component";
-import {MatTableDataSource} from "@angular/material/table";
-import {Observable} from "rxjs";
 import {SwalComponent} from "@sweetalert2/ngx-sweetalert2";
+import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from "@angular/material/tooltip";
+import {MatDialog} from "@angular/material/dialog";
+import {BottomSheetSetComponent} from "../../BottomSheet/bottom-sheet-set/bottom-sheet-set.component";
+
+
+export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 1000,
+  hideDelay: 100,
+  touchendHideDelay: 1000,
+};
 
 @Component({
   selector: 'app-buy',
   templateUrl: './buy.component.html',
-  styleUrls: ['./buy.component.css']
+  styleUrls: ['./buy.component.css'],
+  providers: [{provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults},],
 })
 export class BuyComponent implements OnInit {
   test: string = '';
@@ -27,11 +36,14 @@ export class BuyComponent implements OnInit {
   customerList: CustomerValue[] = [];
   customerListClone: CustomerValue[] = [];
   sumPrice: number = 0
+  isProductImport = false
 
   @ViewChild('f') public readonly form!: NgForm
   @ViewChild('created') public readonly creactedSwal!: SwalComponent;
+  @ViewChild('confirmSwal') public readonly confirmSwal!: SwalComponent;
+  @ViewChild('errored') public readonly erroredSwal!: SwalComponent;
 
-  constructor(private http: HttpClient, private dService: DataServiceService) {
+  constructor(private http: HttpClient, private dService: DataServiceService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -54,29 +66,30 @@ export class BuyComponent implements OnInit {
   getProducts(): void {
     this.http.get<ResDataProduct>(this.dService.baseURI + '/api/Product/Get/' + 'normal' + '/all', {headers: this.dService.headers})
       .subscribe(value => {
-        // console.log(value)
-        // console.log(this.products)
+        // // console.log(value)
+        // // console.log(this.products)
         // const difference = value.data.filter(a => !this.products.map(b => b.productId).includes(a.productId))
         this.allProducts = value.data
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
   getTypes(): void {
     this.http.get<ResDataType>(this.dService.baseURI + '/api/ProductType', {headers: this.dService.headers})
       .subscribe(value => {
-        // console.log(value)
+        // // console.log(value)
         this.productTypes = value.data
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
   drop(event: CdkDragDrop<ValueDataProduct[]>) {
 
-    if (event.previousContainer === event.container) {
 
+
+    if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(
@@ -86,6 +99,7 @@ export class BuyComponent implements OnInit {
         event.currentIndex,
       );
     }
+    console.log(this.products)
     this.amounts = this.products.map(value => 1)
   }
 
@@ -102,18 +116,19 @@ export class BuyComponent implements OnInit {
       productType: this.selectedType ?? -1,
       keyword: this.searchText ?? ""
     }
-    console.log(body)
+    // console.log(body)
     this.http.post<ResDataProduct>(this.dService.baseURI + '/api/Product/Search', body, {headers: this.dService.headers})
       .subscribe(value => {
         this.allProducts = value.data
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
   onInsert(f: NgForm) {
-    console.log(this.selectCustomerFormControl.valid)
-    if (this.selectCustomerFormControl.valid && (this.products.length > 0)) {
+    // console.log(this.selectCustomerFormControl.valid)
+    let avgPriceSet = this.sumPrice / this.products.length
+    if (this.selectCustomerFormControl.valid && (this.products.length > 0) && !this.checkAmount().includes(true)) {
       let body = {
         productBuyID: 0,
         customerID: this.selectCustomerFormControl.value,
@@ -123,19 +138,26 @@ export class BuyComponent implements OnInit {
             productId: value.productId,
             product: value,
             buyAmount: this.amounts[index],
-            buyCurrentPrice: value.proPrice,
+            buyCurrentPrice: this.isProductImport ? avgPriceSet : value.proPrice,
+            date: new Date().getTime() / 1000,
           }
         }),
         coupon: 0,
-        date: new Date().getTime() / 1000
+        date: new Date().getTime() / 1000,
+        sumPrice: this.sumPrice
       }
 
-      console.log(body)
+      // console.log(body)
       this.http.post(this.dService.baseURI + '/api/ProductBuy/Insert', body, {headers: this.dService.headers})
         .subscribe(value => {
-          console.log(value)
+          // console.log(value)
           this.creactedSwal.fire()
         })
+    }
+
+    if (this.checkAmount().includes(true)) {
+      this.erroredSwal.title = "product not enough"
+      this.erroredSwal.fire()
     }
   }
 
@@ -145,13 +167,13 @@ export class BuyComponent implements OnInit {
         this.customerList = value.data
         this.customerListClone = value.data
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
 
   onFilter(event: Event) {
-    // console.log(event)
+    // // console.log(event)
     this.customerList = this._filterCustomerValue(this.customerTextSearch)
     if (this.customerTextSearch == '') {
       this.customerList = this.customerListClone.slice()
@@ -161,21 +183,98 @@ export class BuyComponent implements OnInit {
   onSuccess() {
     this.form.resetForm()
     this.selectCustomerFormControl.reset()
-    this.getProducts()
     this.products = []
+    this.sumPrice = 0
+    this.isProductImport = false
+    this.getProducts()
+
   }
+
   getSumPrice(): number {
     let sum = 0
     this.products.forEach((value, index) => {
       sum += value.proPrice * this.amounts[index]
     })
+    if (!this.isProductImport) {
+      this.sumPrice = sum
+    }
     return sum
   }
 
-  onDiscount() {
-    let sumPrice = this.getSumPrice()
-    this.sumPrice = sumPrice - sumPrice * this.form.value.coupon / 100
+  // onDiscount() {
+  //   let sumPrice = this.getSumPrice()
+  //   this.sumPrice = sumPrice - sumPrice * this.form.value.coupon / 100
+  // }
+
+  public createImgPath = (serverPath: string) => {
+    if (serverPath == null) {
+      return '/assets/upload-1.png'
+    } else {
+      return `${this.dService.baseURI}/${serverPath}`;
+    }
   }
+
+  confirmOrder() {
+    if (this.selectCustomerFormControl.valid && (this.products.length > 0)) {
+      this.confirmSwal.fire()
+    }
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(BottomSheetSetComponent, {
+      width: '650px',
+      data: {
+        isProductImport: false,
+        products: [],
+        amounts: [],
+        sumPrice: 0
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log('The dialog was closed');
+      if (result) {
+        // this.animal = result;
+        console.log(result)
+        this.isProductImport = result.isProductImport
+        this.sumPrice = result.sumPrice
+        this.products = result.products.slice()
+        this.amounts = result.amounts.slice()
+        if (!result.isProductImport) {
+          this.products = []
+
+          if (result.amounts.length > 0) {
+            this.isProductImport = true
+          } else {
+            this.getProducts()
+          }
+          this.sumPrice = 0
+          // // console.log('The dialog was closed' , 'if');
+        }
+      } else {
+        this.isProductImport = false
+        this.products = []
+        this.getProducts()
+        this.sumPrice = 0
+      }
+    });
+  }
+
+  reset() {
+    this.isProductImport = false
+    this.products = []
+    this.amounts = []
+    this.sumPrice = 0
+    this.getProducts()
+  }
+
+  checkAmount() {
+    return this.products.map((value, index) => {
+      return value.proAmount < this.amounts[index]
+    })
+  }
+
+
 }
 
 interface ResDataProduct {
@@ -192,9 +291,10 @@ export interface ProductBuy {
   productBuyID: number,
   customerID: number,
   customer?: CustomerValue,
-  productList: ProductBuyItem[],
+  productList?: ProductBuyItem[],
   coupon: number,
-  date: number
+  date: number,
+  sumPrice: number
 }
 
 export interface ProductBuyItem {
@@ -203,7 +303,8 @@ export interface ProductBuyItem {
   product?: ValueDataProduct,
   buyAmount: number,
   buyCurrentPrice: number,
-  productBuyID: number
+  productBuyID: number,
+  date: number
 }
 
 interface ResDataCustomer {

@@ -30,8 +30,8 @@ export class ProductSetListComponent implements OnInit {
   dataProGroupClone: ProGroup[] = [];
   searchText: string = '';
 
-  constructor(private http: HttpClient, private dService: DataServiceService) {
-    // console.log('test')
+  constructor(private http: HttpClient, public dService: DataServiceService) {
+    // // console.log('test')
   }
 
   ngOnInit(): void {
@@ -41,32 +41,40 @@ export class ProductSetListComponent implements OnInit {
   getProGroup(): void {
     this.http.get<ResProGroup>(this.dService.baseURI + '/api/ProGroup', {headers: this.dService.headers})
       .subscribe(value => {
-        console.log(value.data)
+        // console.log(value.data)
         this.dataProGroup = value.data
         this.dataProGroupClone = value.data
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 
-  getProductSet(): void {
-    this.http.get<ResProSet>(this.dService.baseURI + '/api/ProductSet/' + this.PGId, {headers: this.dService.headers})
-      .subscribe(value => {
-        console.log(value.data)
-        this.dataSource.data = value.data
-        this.dataSource.paginator = this.paginator
-        this.productSets = value.data
-        this.sumPrice = this.getSumPrice(value.data)
-      }, error => {
-        console.log(error)
-      })
+  // getProductSet(): void {
+  //   this.http.get<ResProSet>(this.dService.baseURI + '/api/ProductSet/' + this.PGId, {headers: this.dService.headers})
+  //     .subscribe(value => {
+  //       // console.log(value.data)
+  //       this.dataSource.data = value.data
+  //       this.dataSource.paginator = this.paginator
+  //       this.productSets = value.data
+  //       this.sumPrice = this.getSumPrice(value.data)
+  //     }, error => {
+  //       // console.log(error)
+  //     })
+  // }
+
+  setProductSet(products: ProductSet[]){
+    this.dataSource.data = products
+    this.dataSource.paginator = this.paginator
+    this.productSets = products
+    this.sumPrice = this.getSumPrice(products)
   }
 
   onOpen(item: ProGroup, index: number) {
-    // console.log(item)
-    this.openIndex = index
-    this.PGId = item.pgid
-    this.getProductSet()
+    // // console.log(item)
+    this.setProductSet(item.products)
+    // this.openIndex = index
+    // this.PGId = item.pgid
+    // this.getProductSet()
   }
 
   setDisplayProduct(b: boolean) {
@@ -76,7 +84,7 @@ export class ProductSetListComponent implements OnInit {
       this.getProGroup()
       this.productSets = undefined
     }
-    console.log(b)
+    // console.log(b)
     this.displayProductSet = b;
   }
 
@@ -95,7 +103,7 @@ export class ProductSetListComponent implements OnInit {
   }
 
   onChange(event: Event) {
-    // console.log(this.searchText)
+    // // console.log(this.searchText)
     this.dataProGroup = this._filter(this.searchText)
     if (this.searchText == '') {
       this.dataProGroup = this.dataProGroupClone.slice()
@@ -113,21 +121,23 @@ export class ProductSetListComponent implements OnInit {
   }
 
   toggleUpdateStatus(item: ProGroup): void {
-    this.deleteOldProSet().subscribe(value => {
-      let body = {
-        pgid: item.pgid,
-        pgName: item.pgName,
-        pgPrice: item.pgPrice,
-        pgStatus: !item.pgStatus,
-        products: item.products
-      }
-      this.http.put(this.dService.baseURI + '/api/ProGroup/Update', body, {headers: this.dService.headers})
-        .subscribe(value => {
-          if (typeof value != undefined) {
-            this.getProGroup()
-          }
-        })
-    })
+    let body = {
+      pgid: item.pgid,
+      pgName: item.pgName,
+      pgPrice: item.pgPrice,
+      pgStatus: !item.pgStatus,
+      products: item.products
+    }
+    this.http.put(this.dService.baseURI + '/api/ProGroup/Update/Status', body, {headers: this.dService.headers})
+      .subscribe(value => {
+        if (typeof value != undefined) {
+          this.getProGroup()
+        }
+      })
+
+    // this.deleteOldProSet().subscribe(value => {
+    //
+    // })
   }
 
   deleteOldProSet(): Observable<Object> {
@@ -146,7 +156,7 @@ export class ProductSetListComponent implements OnInit {
   }
 
   deleteProductGroup(item: ProGroup) {
-    console.log(item.pgid)
+    // console.log(item.pgid)
     this.deleteOldProSet().subscribe(value => {
       this.http.delete(this.dService.baseURI + '/api/ProGroup/' + item.pgid, {headers: this.dService.headers})
         .subscribe(value1 => {

@@ -118,7 +118,7 @@ export class EmployeeComponent implements OnInit {
         empSalary: f.value.salary,
         empJoiningDate: this.isEdit ? this.employeeEdit?.empJoiningDate : timestamp
       }
-      // console.log(body)
+      // // console.log(body)
       this.getPutPost(body).subscribe(value => {
         if (typeof value !== undefined) {
           if (this.isEdit) {
@@ -160,7 +160,7 @@ interface ResData {
   data: EmployeeValue[]
 }
 
-interface EmployType {
+export interface EmployType {
   typeId: number
   typeName: string
 }

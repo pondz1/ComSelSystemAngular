@@ -1,5 +1,5 @@
 <mat-tab-group (focusChange)="onTabChange($event)">
-  <mat-tab label="Inventory report">
+  <mat-tab *ngIf="dService.selectedType == 0 || dService.selectedType == 1" label="Inventory report">
 
     <ng-template matTabContent>
       <div class="mt-2">
@@ -88,10 +88,10 @@
                     <td mat-cell *matCellDef="let element"> {{element.proModel}} </td>
                   </ng-container>
 
-<!--                  <ng-container matColumnDef="proDetail">-->
-<!--                    <th mat-header-cell *matHeaderCellDef style="width: 370px"> Detail</th>-->
-<!--                    <td mat-cell *matCellDef="let element"><label class="pt-2 pb-2">{{element.proDetail}}</label></td>-->
-<!--                  </ng-container>-->
+                  <!--                  <ng-container matColumnDef="proDetail">-->
+                  <!--                    <th mat-header-cell *matHeaderCellDef style="width: 370px"> Detail</th>-->
+                  <!--                    <td mat-cell *matCellDef="let element"><label class="pt-2 pb-2">{{element.proDetail}}</label></td>-->
+                  <!--                  </ng-container>-->
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsProduct"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsProduct;">
@@ -121,17 +121,19 @@
 
   <!--  ---------------------------------------------------------------------------------------------------->
 
-  <mat-tab label="Sales Revenue Report">
+  <mat-tab *ngIf="dService.selectedType == 0" label="Sales Revenue Report">
     <ng-template matTabContent>
-      Content 2 - Loaded: {{getTimeLoaded(2) | date:'medium'}}
+<!--      Content 2 - Loaded: {{getTimeLoaded(2) | date:'medium'}}-->
+      <app-report-sales-revenue></app-report-sales-revenue>
     </ng-template>
   </mat-tab>
 
   <!--  ---------------------------------------------------------------------------------------------------->
 
-  <mat-tab label="Customer purchase report">
+  <mat-tab *ngIf="dService.selectedType == 0 || dService.selectedType == 2" label="Customer purchase report">
     <ng-template matTabContent>
-      Content 3 - Loaded: {{getTimeLoaded(3) | date:'medium'}}
+      <!--      Content 3 - Loaded: {{getTimeLoaded(3) | date:'medium'}}-->
+      <app-report-customer></app-report-customer>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

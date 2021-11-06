@@ -33,7 +33,7 @@ export class ReportComponent implements OnInit {
     return this.tabLoadTimes[index];
   }
 
-  constructor(private http: HttpClient, private dService: DataServiceService) {
+  constructor(private http: HttpClient, public dService: DataServiceService) {
     // this.dataSourceInventory.data = this.TREE_DATA
   }
 
@@ -51,7 +51,7 @@ export class ReportComponent implements OnInit {
 
 
   onTabChange(event: MatTabChangeEvent) {
-    console.log(event)
+    // console.log(event)
     if (event.index == 0) {
       this.getInventoryReport()
     }
@@ -61,7 +61,7 @@ export class ReportComponent implements OnInit {
     this.http.get<ResInventReport>(this.dService.baseURI + '/api/Report/InventoryReport')
       .subscribe(value => {
         this.inventReport = value.data
-        console.log(value)
+        // console.log(value)
         // this.TREE_DATA = value.data.map(value1 => {
         //   return {
         //     name: value1.productType.typeName,
@@ -72,10 +72,10 @@ export class ReportComponent implements OnInit {
         //   }
         // })
         // this.dataSourceInventory.data = this.TREE_DATA
-        // console.log(this.TREE_DATA)
+        // // console.log(this.TREE_DATA)
         // this.TREE_DATA.push({name: value.data})
       }, error => {
-        console.log(error)
+        // console.log(error)
       })
   }
 

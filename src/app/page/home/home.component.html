@@ -5,59 +5,68 @@
     </button>
     <span>Computer Hardware Store System</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button aria-label="Example icon-button with heart icon">
-      <mat-icon>favorite</mat-icon>
-    </button>
-    <button mat-icon-button aria-label="Example icon-button with share icon">
-      <mat-icon>share</mat-icon>
-    </button>
+
+    <select (ngModelChange)="onChange($event)" [(ngModel)]="selectedType">
+      <option *ngFor="let type of employTypes" [ngValue]="type.typeId">
+        {{type.typeName}}
+      </option>
+    </select>
+
+
+<!--    <button mat-icon-button aria-label="Example icon-button with heart icon">-->
+<!--      <mat-icon>favorite</mat-icon>-->
+<!--    </button>-->
+<!--    <button mat-icon-button aria-label="Example icon-button with share icon">-->
+<!--      <mat-icon>share</mat-icon>-->
+<!--    </button>-->
   </mat-toolbar>
 </p>
 
 <mat-drawer-container class="example-container" hasBackdrop="false" style="height: 100vh">
-  <mat-drawer #drawer mode="side" opened>
+  <mat-drawer #drawer mode="side" opened style="width: 230px">
     <!--    <mat-toolbar color="primary" style="width: 200px">-->
     <!--      Menu-->
     <!--    </mat-toolbar>-->
     <div style="margin-top: 64px"></div>
     <div>
-      <button mat-button class="text-start w-100" (click)="setPage('product')"
+      <button *ngIf="selectedType == 0 || selectedType == 1" mat-button class="text-start w-100" (click)="setPage('product')"
               color="{{pageName == 'product' ? 'primary' : 'null'}}">
-<!--        <mat-icon>inventory_2</mat-icon>-->
+        <!--        <mat-icon>inventory_2</mat-icon>-->
         Product
       </button>
-      <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('productType')"
+      <mat-divider *ngIf="selectedType == 0 || selectedType == 1"></mat-divider>
+      <button *ngIf="selectedType == 0 || selectedType == 1" mat-button class="text-start w-100" (click)="setPage('productType')"
               color="{{pageName == 'productType' ? 'primary' : 'null'}}">
-<!--        <mat-icon>category</mat-icon>-->
+        <!--        <mat-icon>category</mat-icon>-->
         Product Type
       </button>
-      <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('productSet')"
+      <mat-divider *ngIf="selectedType == 0 || selectedType == 1"></mat-divider>
+      <button *ngIf="selectedType == 0 || selectedType == 1" mat-button class="text-start w-100" (click)="setPage('productSet')"
               color="{{pageName == 'productSet' ? 'primary' : 'null'}}">
         Product Set
       </button>
       <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('customer')"
+      <button *ngIf="selectedType == 0  || selectedType == 2" mat-button class="text-start w-100" (click)="setPage('customer')"
               color="{{pageName == 'customer' ? 'primary' : 'null'}}">
         Customer
       </button>
-      <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('employee')"
+      <mat-divider *ngIf="selectedType == 0  || selectedType == 2"></mat-divider>
+      <button *ngIf="selectedType == 0" mat-button class="text-start w-100" (click)="setPage('employee')"
               color="{{pageName == 'employee' ? 'primary' : 'null'}}">
         Employee
       </button>
-      <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('report')"
+      <mat-divider *ngIf="selectedType == 0"></mat-divider>
+      <button *ngIf="selectedType == 2" mat-button class="text-start w-100" (click)="setPage('buy')"
+              color="{{pageName == 'buy' ? 'primary' : 'null'}}">
+        Shop
+      </button>
+      <mat-divider *ngIf="selectedType == 2"></mat-divider>
+      <button  mat-button class="text-start w-100" (click)="setPage('report')"
               color="{{pageName == 'report' ? 'primary' : 'null'}}">
         Report
       </button>
       <mat-divider></mat-divider>
-      <button mat-button class="text-start w-100" (click)="setPage('buy')"
-              color="{{pageName == 'buy' ? 'primary' : 'null'}}">
-        Buy
-      </button>
-      <mat-divider></mat-divider>
+
 
     </div>
   </mat-drawer>

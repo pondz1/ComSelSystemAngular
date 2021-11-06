@@ -87,7 +87,14 @@ export class CustomerComponent implements OnInit {
   }
 
   delete(element: CustomerValue) {
-    this.http.delete(this.dService.baseURI + '/api/Customer/' + element.customerID, {headers: this.dService.headers})
+    let body = {
+      customerID: element.customerID,
+      cusFirstName: element.cusFirstName,
+      cusLastName: element.cusLastName,
+      cusAddress: element.cusAddress,
+      visible: false
+    }
+    this.http.put(this.dService.baseURI + '/api/Customer/Update', body, {headers: this.dService.headers})
       .subscribe(value => {
         if (typeof value !== undefined) {
           this.getCustomers()
@@ -96,6 +103,9 @@ export class CustomerComponent implements OnInit {
         this.erroredSwal.title = 'Error code status ' + error.status
         this.erroredSwal.fire()
       })
+
+    // this.http.delete(this.dService.baseURI + '/api/Customer/' + element.customerID, {headers: this.dService.headers})
+
   }
 
   insert(f: NgForm) {
@@ -105,6 +115,7 @@ export class CustomerComponent implements OnInit {
         cusFirstName: f.value.name.trim(),
         cusLastName: f.value.last.trim(),
         cusAddress: f.value.address.trim(),
+        visible: true
       }
       this.getPutPost(body).subscribe(value => {
         if (typeof value !== undefined) {
@@ -140,5 +151,6 @@ export interface CustomerValue {
   customerID: number
   cusFirstName: string
   cusLastName: string
-  cusAddress: string
+  cusAddress: string,
+  visible: boolean
 }

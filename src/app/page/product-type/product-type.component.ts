@@ -38,7 +38,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
   getTypes(): void {
     this.http.get<ResData>(this.dataSer.baseURI + '/api/ProductType', {headers: this.dataSer.headers})
       .subscribe(value => {
-        // console.log(value)
+        // // console.log(value)
         this.dataSource = new MatTableDataSource<ValueDataType>(value.data);
         this.dataSource.paginator = this.paginator;
       }, error => {
@@ -71,7 +71,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
     // });
     //
     // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
+    //   // console.log('The dialog was closed');
     //   this.getTypes()
     // });
   }
@@ -83,7 +83,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
       this.getTypes()
     });
   }
@@ -91,7 +91,7 @@ export class ProductTypeComponent implements OnInit, AfterViewInit {
   deleteProduct(element: ValueDataType) {
     this.http.delete(this.dataSer.baseURI + '/api/ProductType/' + element.typeID)
       .subscribe(value => {
-        // console.log(value)
+        // // console.log(value)
         if (typeof value !== undefined){
           this.getTypes()
         }

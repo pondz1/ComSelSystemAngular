@@ -8,6 +8,7 @@ export class DataServiceService {
 
   baseURI = 'https://localhost:44317';
   headers = new HttpHeaders();
+  selectedType = 0
 
   constructor() {
     this.headers.set('Content-Type', 'application/json; charset=utf-8');
